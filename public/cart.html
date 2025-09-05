@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #2196f3, #21cbf3);
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px;
+      background: white;
+      margin: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    #cart-items {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+    .cart-item {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: white;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .cart-item:hover { transform: scale(1.02); }
+    .cart-item img {
+      width: 90px; height: 90px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .cart-info { flex: 1; margin-left: 20px; }
+    .cart-info h3 { margin: 0 0 5px; font-size: 1.2rem; }
+    .cart-info p { margin: 4px 0; color: #555; }
+    .qty {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty button {
+      background: #2196f3;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .qty button:hover { background: #1976d2; }
+    .remove-btn {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .remove-btn:hover { background: darkred; }
+    #total {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      font-size: 1.4rem;
+      text-align: right;
+      font-weight: bold;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Order form */
+    #order-form {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    #order-form h2 {
+      margin-bottom: 15px;
+      text-align: center;
+      color: #333;
+    }
+    #order-form input, #order-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    #order-form button {
+      display: block;
+      margin: 15px auto 0;
+      padding: 12px 25px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+    #order-form button:hover { background: #388e3c; }
+  </style>
+</head>
+<body>
+  <h1>🛒 Your Cart</h1>
+  <div id="cart-items"></div>
+  <div id="total"></div>
+
+  <!-- ORDER FORM -->
+  <div id="order-form">
+    <h2>Place Your Order</h2>
+    <form id="checkout-form">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <textarea id="address" rows="3" placeholder="Delivery Address" required></textarea>
+      <textarea id="notes" rows="3" placeholder="Additional Notes (optional)"></textarea>
+      <button type="submit">✅ Submit Order</button>
+    </form>
+  </div>
+
+<script>
+function renderCart() {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const container = document.getElementById("cart-items");
+  const totalDiv = document.getElementById("total");
+  container.innerHTML = "";
+  let grandTotal = 0;
+
+  if (cart.length === 0) {
+    container.innerHTML = "<p style='text-align:center;'>Your cart is empty 🛒</p>";
+    totalDiv.innerHTML = "";
+    return;
+  }
+
+  cart.forEach((item, index) => {
+    const price = item.price || 0;
+    const total = price * item.qty;
+    grandTotal += total;
+
+    const div = document.createElement("div");
+    div.classList.add("cart-item");
+    div.innerHTML = `
+      <img src="${item.img}" alt="${item.alt}">
+      <div class="cart-info">
+        <h3>${item.alt}</h3>
+        <p>Price: ₦${price.toLocaleString()}</p>
+        <div class="qty">
+          <button onclick="updateQty(${index}, -1)">-</button>
+          <span>${item.qty}</span>
+          <button onclick="updateQty(${index}, 1)">+</button>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        </div>
+        <p>Total: ₦${total.toLocaleString()}</p>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  totalDiv.innerHTML = `Grand Total: ₦${grandTotal.toLocaleString()}`;
+}
+
+function updateQty(index, change) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart[index].qty += change;
+  if (cart[index].qty <= 0) cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+function removeItem(index) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  renderCart();
+}
+
+// Handle form submission
+document.getElementById("checkout-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart.length === 0) {
+    alert("⚠️ Your cart is empty!");
+    return;
+  }
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const address = document.getElementById("address").value;
+  const notes = document.getElementById("notes").value;
+
+  let orderSummary = "📦 New Order:\n\n";
+  cart.forEach(item => {
+    orderSummary += `${item.qty} × ${item.alt} - ₦${(item.price * item.qty).toLocaleString()}\n`;
+  });
+
+  orderSummary += `\n👤 Name: ${name}\n📞 Phone: ${phone}\n🏠 Address: ${address}`;
+  if (notes) orderSummary += `\n📝 Notes: ${notes}`;
+
+  // encode for WhatsApp
+  const encodedMessage = encodeURIComponent(orderSummary);
+
+  // 👉 Replace with your WhatsApp number in international format (without + or spaces)
+  const whatsappNumber = "08165881012"; 
+
+  // Open WhatsApp with the order message
+  window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, "_blank");
+
+  // clear cart after order
+  localStorage.removeItem("cart");
+  renderCart();
+});
+
+renderCart();
+</script>
+</body>
+</html>

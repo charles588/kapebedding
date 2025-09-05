@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kapebeddings.ng</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    header, footer {
+      background: #3e2723;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    header nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header a, footer a {
+      color: aquamarine;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    #cart-icon {
+      position: relative;
+      font-size: 1.2rem;
+    }
+    #cart-count {
+      background: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+      position: absolute;
+      top: -10px;
+      right: -10px;
+    }
+
+    #mpa {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .tt {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s;
+    }
+
+    .tt:hover {
+      transform: scale(1.02);
+    }
+
+    .tt img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tt h3 {
+      margin: 0.5rem;
+    }
+    .tt p {
+      margin: 0.5rem;
+      font-weight: bold;
+      color: #444;
+    }
+
+    .cond {
+      display: flex;
+      justify-content: space-around;
+      padding: 1rem;
+      background: #fafafa;
+    }
+
+    .lw {
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .contact-btn {
+      background: #4caf50;
+      color: white;
+    }
+    .contact-btn:hover {
+      background: #388e3c;
+    }
+
+    .cart-btn {
+      background: #ff9800;
+      color: white;
+    }
+    .cart-btn:hover {
+      background: #e68900;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <header>
+    <nav>
+      <a href="contact.html">📞 Contact Us</a>
+      <a href="cart.html" id="cart-icon">🛒 <span id="cart-count">0</span></a>
+    </nav>
+  </header>
+
+  <!-- Product Gallery -->
+  <main id="mpa"></main>
+
+  <!-- Footer -->
+  <footer>
+    <a href="contact.html">❓ Couldn't find my style?</a>
+  </footer>
+
+  <script>
+    // Product Data
+const products = [
+  { id: 1, img: "blue.jpg", alt: "Blue bedding set", price: 35000 },
+  { id: 2, img: "White.jpg", alt: "White luxury bedding", price: 45000 },
+  { id: 3, img: "pattern.jpg", alt: "Patterned duvet", price: 30000 },
+  { id: 4, img: "floral.jpg", alt: "Floral bedsheet", price: 25000 },
+  { id: 5, img: "gold.jpg", alt: "Luxury gold bedding", price: 55000 },
+  { id: 6, img: "grey.jpg", alt: "Gray bedding set", price: 32000 },
+  { id: 7, img: "black.jpg", alt: "Black bedding set", price: 40000 },
+  { id: 8, img: "pur.jpg", alt: "Royal blue bedding", price: 38000 },
+  { id: 9, img: "brown.jpg", alt: "Brown luxury bedding", price: 42000 },
+  { id: 10, img: "modern.jpg", alt: "Modern patterned set", price: 30000 },
+  { id: 11, img: "luxury.jpg", alt: "Luxury cream bedding", price: 47000 },
+  { id: 12, img: "designer.jpg", alt: "Designer bedding set", price: 50000 },
+  { id: 13, img: "gray.jpg", alt: "Gray luxury duvet", price: 35000 },
+  { id: 14, img: "red.jpg", alt: "Red bedding set", price: 36000 },
+  { id: 15, img: "green.jpg", alt: "Kapebeddings logo design", price: 0 }
+];
+
+
+
+
+    const container = document.getElementById("mpa");
+
+    // Render products
+    products.forEach(product => {
+      const div = document.createElement("div");
+      div.classList.add("tt");
+      div.innerHTML = `
+        <img src="${product.img}" alt="${product.alt}">
+        <h3>${product.alt}</h3>
+        <p>₦${product.price.toLocaleString()}</p>
+        <div class="cond">
+          <button class="lw contact-btn" data-id="${product.id}">Contact Dealer</button>
+          <button class="lw cart-btn" data-id="${product.id}">Add to Cart</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    // Cart functions
+    function addToCart(id) {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const product = products.find(p => p.id == id);
+      const item = cart.find(i => i.id == id);
+
+      if (item) {
+        item.qty++;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+    
+    }
+
+    function updateCartCount() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const count = cart.reduce((sum, i) => sum + i.qty, 0);
+      document.getElementById("cart-count").textContent = count;
+    }
+
+    updateCartCount();
+
+    // Button actions
+    document.addEventListener("click", (e) => {
+      if (e.target.classList.contains("contact-btn")) {
+        const id = e.target.dataset.id;
+        const product = products.find(p => p.id == id);
+        const phone = "2348012345678"; // Replace with your WhatsApp number
+        window.open(`https://wa.me/${phone}?text=Hello, I'm interested in: ${product.alt}`, "_blank");
+      }
+      if (e.target.classList.contains("cart-btn")) {
+        addToCart(e.target.dataset.id);
+      }
+    });
+  </script>
+</body>
+</html>

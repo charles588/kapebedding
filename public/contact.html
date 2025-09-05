@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact</title>
+  <style>
+    body {
+      background-color: #3e2723; /* deeper brown */
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      width: 100%;
+      padding: 1rem;
+      text-align: center;
+      background: rgba(0,0,0,0.4);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 1rem;
+      transition: color 0.3s;
+    }
+    header a:hover {
+      color: aquamarine;
+    }
+
+    h1 {
+      color: aquamarine;
+      margin: 2rem 0 1rem;
+      font-size: 2.5rem;
+    }
+
+    #con {
+      max-width: 700px;
+      width: 90%;
+      background: rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      margin: 1rem;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .contact-links {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-links a {
+      display: block;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      background: #ff9800; /* orange */
+      color: white;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .contact-links a:hover {
+      background: aquamarine;
+      color: #222;
+      transform: translateY(-3px);
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;
+      }
+      #con {
+        padding: 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html">🏠 Home</a>
+    <a href="cart.html">🛒 Cart</a>
+  </header>
+
+  <h1>Contact Us</h1>
+
+  <div id="con">
+    <p><strong>Phone:</strong> +234 801 234 5678</p>
+    <p><strong>Email:</strong> support@kapebeddings.ng</p>
+    <p><strong>Address:</strong> No. 12 Bedding Street, Lagos, Nigeria</p>
+
+    <div class="contact-links">
+      <a href="https://wa.me/2348012345678" target="_blank">💬 Chat on WhatsApp</a>
+      <a href="mailto:support@kapebeddings.ng">📧 Send Email</a>
+    </div>
+  </div>
+</body>
+</html>
