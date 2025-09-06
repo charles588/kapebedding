@@ -153,7 +153,13 @@ const products = [
   { id: 12, img: "designer.jpg", alt: "Designer bedding set", price: 50000 },
   { id: 13, img: "gray.jpg", alt: "Gray luxury duvet", price: 35000 },
   { id: 14, img: "red.jpg", alt: "Red bedding set", price: 36000 },
-  { id: 15, img: "green.jpg", alt: "Kapebeddings logo design", price: 0 }
+  { id: 15, img: "green.jpg", alt: "Kapebeddings logo design", price: 0 },
+   { id: 16, img: "ch.jpg", alt: "your patterned set", price: 30000 },
+  { id: 17, img: "ar.jpg", alt: "home cream bedding", price: 47000 },
+  { id: 18, img: "le.jpg", alt: "your bedding set", price: 50000 },
+  { id: 19, img: "es.jpg", alt: "family duvet", price: 35000 },
+  { id: 20, img: "si.jpg", alt: "unique set", price: 36000 },
+  { id: 21, img: "se.jpg", alt: "luxury set", price: 0 }
 ];
 
 
@@ -207,7 +213,7 @@ const products = [
       if (e.target.classList.contains("contact-btn")) {
         const id = e.target.dataset.id;
         const product = products.find(p => p.id == id);
-        const phone = "2348012345678"; // Replace with your WhatsApp number
+        const phone = "+234 813 106 2205"; // Replace with your WhatsApp number
         window.open(`https://wa.me/${phone}?text=Hello, I'm interested in: ${product.alt}`, "_blank");
       }
       if (e.target.classList.contains("cart-btn")) {
