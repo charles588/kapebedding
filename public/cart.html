@@ -215,7 +215,7 @@ document.getElementById("checkout-form").addEventListener("submit", (e) => {
   const encodedMessage = encodeURIComponent(orderSummary);
 
   // 👉 Replace with your WhatsApp number in international format (without + or spaces)
-  const whatsappNumber = "08165881012"; 
+  const whatsappNumber = "+234 813 106 2205"; 
 
   // Open WhatsApp with the order message
   window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, "_blank");
