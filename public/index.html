@@ -121,12 +121,14 @@
 </head>
 <body>
   <!-- Navigation -->
-  <header>
-    <nav>
-      <a href="contact.html">📞 Contact Us</a>
-      <a href="cart.html" id="cart-icon">🛒 <span id="cart-count">0</span></a>
-    </nav>
-  </header>
+<header>
+  <nav>
+    <a href="contact.html">📞 Contact Us</a>
+    <a href="cart.html" id="cart-icon">🛒 <span id="cart-count">0</span></a>
+    <a href="admin.html" id="admin-link" title="Admin Panel">🔑</a> <!-- 🟢 Admin Icon -->
+  </nav>
+</header>
+
 
   <!-- Product Gallery -->
   <main id="mpa"></main>
@@ -137,38 +139,39 @@
   </footer>
 
   <script>
-    // Product Data
-const products = [
-  { id: 1, img: "blue.jpg", alt: "Blue bedding set", price: 8500 },
-  { id: 2, img: "white.jpg", alt: "white luxury bedding", price: 20000 },
-  { id: 3, img: "pattern.jpg", alt: "Patterned duvet", price: 9000},
-  { id: 4, img: "floral.jpg", alt: "Floral bedsheet", price: 8500 },
-  { id: 5, img: "gold.jpg", alt: "Luxury gold bedding", price: 15000 },
-  { id: 6, img: "grey.jpg", alt: "Gray bedding set", price: 8500 },
-  { id: 7, img: "black.jpg", alt: "Black bedding set", price: 9000 },
-  { id: 8, img: "pur.jpg", alt: "Royal blue bedding", price: 9500 },
-  { id: 9, img: "brown.jpg", alt: "Brown luxury bedding", price: 9000 },
-  { id: 10, img: "modern.jpg", alt: "Modern patterned set", price: 9000 },
-  { id: 11, img: "luxury.jpg", alt: "Luxury cream bedding", price: 9500 },
-  { id: 12, img: "designer.jpg", alt: "Designer bedding set", price: 8500 },
-  { id: 13, img: "gray.jpg", alt: "Gray luxury duvet", price: 9000 },
-  { id: 14, img: "red.jpg", alt: "Red bedding set", price: 9500},
-  { id: 15, img: "green.jpg", alt: "Kapebeddings ", price: 8000 },
-   { id: 16, img: "ch.jpg", alt: "your patterned set", price: 8300 },
-  { id: 17, img: "ar.jpg", alt: "home cream bedding", price: 8500 },
-  { id: 18, img: "le.jpg", alt: "your bedding set", price: 9000 },
-  { id: 19, img: "es.jpg", alt: "family duvet", price: 8500},
-  { id: 20, img: "si.jpg", alt: "unique set", price: 9500 },
-  { id: 21, img: "se.jpg", alt: "luxury set", price: 8000 }
-];
-
-
-
+    // Default Product Data (built-in)
+    const products = [
+      { id: 1, img: "blue.jpg", alt: "Blue bedding set", price: 8500 },
+      { id: 2, img: "white.jpg", alt: "white luxury bedding", price: 20000 },
+      { id: 3, img: "pattern.jpg", alt: "Patterned duvet", price: 9000},
+      { id: 4, img: "floral.jpg", alt: "Floral bedsheet", price: 8500 },
+      { id: 5, img: "gold.jpg", alt: "Luxury gold bedding", price: 15000 },
+      { id: 6, img: "grey.jpg", alt: "Gray bedding set", price: 8500 },
+      { id: 7, img: "black.jpg", alt: "Black bedding set", price: 9000 },
+      { id: 8, img: "pur.jpg", alt: "Royal blue bedding", price: 9500 },
+      { id: 9, img: "brown.jpg", alt: "Brown luxury bedding", price: 9000 },
+      { id: 10, img: "modern.jpg", alt: "Modern patterned set", price: 9000 },
+      { id: 11, img: "luxury.jpg", alt: "Luxury cream bedding", price: 9500 },
+      { id: 12, img: "designer.jpg", alt: "Designer bedding set", price: 8500 },
+      { id: 13, img: "gray.jpg", alt: "Gray luxury duvet", price: 9000 },
+      { id: 14, img: "red.jpg", alt: "Red bedding set", price: 9500},
+      { id: 15, img: "green.jpg", alt: "Kapebeddings ", price: 8000 },
+      { id: 16, img: "ch.jpg", alt: "your patterned set", price: 8300 },
+      { id: 17, img: "ar.jpg", alt: "home cream bedding", price: 8500 },
+      { id: 18, img: "le.jpg", alt: "your bedding set", price: 9000 },
+      { id: 19, img: "es.jpg", alt: "family duvet", price: 8500},
+      { id: 20, img: "si.jpg", alt: "unique set", price: 9500 },
+      { id: 21, img: "se.jpg", alt: "luxury set", price: 8000 }
+    ];
 
     const container = document.getElementById("mpa");
 
+    // 🟢 Merge stored products with default ones
+    let storedProducts = JSON.parse(localStorage.getItem("products")) || [];
+    let allProducts = [...products, ...storedProducts];
+
     // Render products
-    products.forEach(product => {
+    allProducts.forEach(product => {
       const div = document.createElement("div");
       div.classList.add("tt");
       div.innerHTML = `
@@ -186,7 +189,7 @@ const products = [
     // Cart functions
     function addToCart(id) {
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const product = products.find(p => p.id == id);
+      const product = allProducts.find(p => p.id == id); // 🟢 use allProducts
       const item = cart.find(i => i.id == id);
 
       if (item) {
@@ -197,7 +200,6 @@ const products = [
 
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCartCount();
-    
     }
 
     function updateCartCount() {
@@ -212,8 +214,8 @@ const products = [
     document.addEventListener("click", (e) => {
       if (e.target.classList.contains("contact-btn")) {
         const id = e.target.dataset.id;
-        const product = products.find(p => p.id == id);
-        const phone = "+234 813 106 2205"; // Replace with your WhatsApp number
+        const product = allProducts.find(p => p.id == id); // 🟢 use allProducts
+        const phone = "+2348131062205"; // Replace with your WhatsApp number
         window.open(`https://wa.me/${phone}?text=Hello, I'm interested in: ${product.alt}`, "_blank");
       }
       if (e.target.classList.contains("cart-btn")) {
