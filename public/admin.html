@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Add Products</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 2rem;
+    }
+
+    .login, .admin-panel {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input, button {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.7rem;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #3e2723;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #5d4037;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login Box -->
+  <div class="login" id="loginBox">
+    <h2>Admin Login</h2>
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="checkPassword()">Login</button>
+    <p id="error" style="color:red; display:none;">Wrong password!</p>
+  </div>
+
+  <!-- Admin Panel -->
+  <div class="admin-panel" id="adminPanel" style="display:none;">
+    <h2>Add Product</h2>
+    <input type="text" id="img" placeholder="Image file name (e.g. blue.jpg)">
+    <input type="text" id="alt" placeholder="Product Name / Description">
+    <input type="number" id="price" placeholder="Price (₦)">
+    <button onclick="addProduct()">Add Product</button>
+    <p id="success" style="color:green; display:none;">✅ Product added successfully!</p>
+  </div>
+
+  <script>
+    const PASSWORD = "ebubechi247";
+
+    function checkPassword() {
+      const input = document.getElementById("password").value;
+      if (input === PASSWORD) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+      } else {
+        document.getElementById("error").style.display = "block";
+      }
+    }
+
+    function addProduct() {
+      const img = document.getElementById("img").value.trim();
+      const alt = document.getElementById("alt").value.trim();
+      const price = parseInt(document.getElementById("price").value);
+
+      if (!img || !alt || !price) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      let products = JSON.parse(localStorage.getItem("products")) || [];
+      const newProduct = {
+        id: Date.now(),
+        img,
+        alt,
+        price
+      };
+      products.push(newProduct);
+      localStorage.setItem("products", JSON.stringify(products));
+
+      document.getElementById("success").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("success").style.display = "none";
+      }, 2000);
+
+      // Reset form
+      document.getElementById("img").value = "";
+      document.getElementById("alt").value = "";
+      document.getElementById("price").value = "";
+    }
+  </script>
+</body>
+</html>
